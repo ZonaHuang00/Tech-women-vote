@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1920">
+    <title>投票結果 — 2026 TechWomen@TW</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="result-page">
+
+    <div class="dash-bg">
+        <div class="dash-orb dash-orb-1"></div>
+        <div class="dash-orb dash-orb-2"></div>
+        <div class="dash-orb dash-orb-3"></div>
+        <div class="dash-grid-overlay"></div>
+    </div>
+
+    <header class="dash-header">
+        <div class="dash-logo">
+            <div class="logo-icon logo-icon--dash"><span class="logo-symbol">TW</span></div>
+            <div class="logo-text">
+                <span class="logo-year">2026</span>
+                <span class="logo-name">TechWomen<span class="logo-at">@</span>TW</span>
+            </div>
+        </div>
+        <h1 class="dash-title">現場投票結果</h1>
+        <div class="dash-meta">
+            <div class="dash-meta-item">
+                <span class="dash-meta-num" id="totalVoters">--</span>
+                <span class="dash-meta-label">參與人數</span>
+            </div>
+            <div class="dash-meta-divider"></div>
+            <div class="dash-meta-item">
+                <span class="dash-meta-num" id="statTime">--</span>
+                <span class="dash-meta-label">統計時間</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="dash-loading" id="loadingScreen">
+        <div class="dash-spinner"></div>
+        <p>正在載入投票結果⋯</p>
+    </div>
+
+    <div class="dash-state" id="notReadyScreen" style="display:none;">
+        <div class="dash-state-icon">🔒</div>
+        <h2>結果尚未公佈</h2>
+        <p>投票仍在進行中，請稍候⋯</p>
+    </div>
+
+    <main class="dash-grid" id="resultsContainer" style="display:none;">
+        <section class="dash-panel panel-q1">
+            <div class="panel-header">
+                <span class="panel-badge">Q1</span>
+                <h2>未來 10 年職場最重要的能力</h2>
+            </div>
+            <div class="panel-body">
+                <div class="dash-podium" id="q1Podium"></div>
+                <div class="dash-bars" id="q1BarChart"></div>
+            </div>
+        </section>
+        <section class="dash-panel panel-q2">
+            <div class="panel-header">
+                <span class="panel-badge panel-badge--pink">Q2</span>
+                <h2>跨世代最能互相學習的能力</h2>
+            </div>
+            <div class="panel-body">
+                <div class="dash-bars" id="q2BarChart"></div>
+                <div class="dash-ranking" id="q2Ranking"></div>
+            </div>
+        </section>
+        <section class="dash-panel panel-q3">
+            <div class="panel-header">
+                <span class="panel-badge panel-badge--teal">Q3</span>
+                <h2>最期待的未來職場關鍵詞</h2>
+            </div>
+            <div class="panel-body panel-body--cloud">
+                <canvas id="wordCloudCanvas"></canvas>
+                <div class="dash-keywords" id="keywordList"></div>
+            </div>
+        </section>
+    </main>
+
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { ResultApp.init(); });</script>
+</body>
+</html>

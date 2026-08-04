@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>投票成功 — 2026 TechWomen@TW</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body class="thankyou-page">
+
+    <div class="ty-bg">
+        <div class="hero-orb orb-1"></div>
+        <div class="hero-orb orb-2"></div>
+        <div class="hero-orb orb-3"></div>
+        <div class="hero-mesh"></div>
+    </div>
+
+    <main class="ty-main">
+        <div class="ty-check-wrap">
+            <svg class="ty-check" viewBox="0 0 52 52">
+                <circle cx="26" cy="26" r="25" fill="none"/>
+                <path fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+            </svg>
+        </div>
+
+        <h1 class="ty-title">感謝妳的參與！</h1>
+        <p class="ty-subtitle">投票已成功送出 🎉</p>
+
+        <div class="ty-card glass-card">
+            <div class="ty-row">
+                <span class="ty-label">🕐 投票時間</span>
+                <span class="ty-value" id="tyTime"></span>
+            </div>
+            <div class="ty-divider"></div>
+            <div class="ty-row">
+                <span class="ty-label">🎫 投票編號</span>
+                <span class="ty-value" id="tyId"></span>
+            </div>
+        </div>
+
+        <div class="ty-event glass-card">
+            <div class="ty-event-logo">
+                <div class="logo-icon logo-icon--sm"><span class="logo-symbol">TW</span></div>
+                <div class="logo-text">
+                    <span class="logo-year">2026</span>
+                    <span class="logo-name logo-name--sm">TechWomen<span class="logo-at">@</span>TW</span>
+                </div>
+            </div>
+            <div class="ty-event-info">
+                <div class="ty-event-row"><span>📍</span><span>投票結果將於下午 Workshop 時段公佈</span></div>
+                <div class="ty-event-row"><span>💡</span><span>請留意現場大螢幕的即時排行榜</span></div>
+                <div class="ty-event-row"><span>☕</span><span>享用午餐的同時，期待精彩下午場！</span></div>
+            </div>
+        </div>
+
+        <p class="ty-footer-text">妳的每一個選擇，都在推動科技更具包容力。</p>
+    </main>
+
+    <footer class="site-footer site-footer--dark">
+        <span class="footer-brand">TechWomen<span>@</span>TW</span>
+        <span class="footer-copy">© 2026</span>
+    </footer>
+
+    <script src="content.js"></script>
+    <script src="app.js"></script>
+    <script>document.addEventListener('DOMContentLoaded', () => { ThankYouApp.init(); });</script>
+</body>
+</html>
