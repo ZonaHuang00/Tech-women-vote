@@ -10,7 +10,7 @@
 /* ---- 設定區 ---- */
 // ★ 部署 Google Apps Script 後，把下面這行換成你的 Web App URL
 // ★ 測試階段保持空字串即可，系統會自動進入離線模式
-var API_URL = '';
+var API_URL = 'https://script.google.com/macros/s/AKfycbzGdwYKzo_x7_DwY038vImB-aFFX-0gZlI2lEBM3farvqfw3hJDop7Z0qSggJlX6mNITA/exec';
 
 var VOTE_DEADLINE = new Date('2026-12-31T13:30:00+08:00');
 var VOTED_KEY = 'techwomen_2026_voted';
