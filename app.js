@@ -412,7 +412,6 @@ var ResultApp = {
     }
   },
 
-  ```javascript
 renderWordCloud: function(words) {
   if (!words) return;
 
