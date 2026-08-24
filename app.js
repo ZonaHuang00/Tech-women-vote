@@ -759,3 +759,4 @@ renderWordCloud: function(words) {
     kwEl.style.display = 'none';
   }
 }
+};
