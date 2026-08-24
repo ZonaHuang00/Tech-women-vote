@@ -412,103 +412,351 @@ var ResultApp = {
     }
   },
 
-  renderWordCloud: function(words) {
-    if (!words) return;
+  ```javascript
+renderWordCloud: function(words) {
+  if (!words) return;
 
-    var entries = Object.entries(words)
-      .map(function(e) { return { text: e[0], count: e[1] }; })
-      .sort(function(a, b) { return b.count - a.count; });
+  // ============================================================
+  // Q3 Word Cloud
+  // 票數越高，文字越大
+  // 例如：
+  // 信任 3票        → 最大
+  // AI賦能 2票      → 次大
+  // 工作生活平衡 2票 → 次大
+  // 共融 1票        → 較小
+  // 多元包容 1票    → 較小
+  // ============================================================
 
-    var canvas = document.getElementById('wordCloudCanvas');
-    if (!canvas) return;
-    var container = canvas.parentElement;
+  var canvas = document.getElementById('wordCloudCanvas');
+  if (!canvas) return;
 
-    if (entries.length === 0) {
-      container.innerHTML = '<p style="color:rgba(255,255,255,.4);font-size:2rem;">尚無文字回饋</p>';
-      return;
-    }
+  var container = canvas.parentElement;
+  if (!container) return;
 
-    var dpr = window.devicePixelRatio || 1;
-    var w = container.offsetWidth;
-    var h = container.offsetHeight || Math.round(w * 0.55);
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    var ctx = canvas.getContext('2d');
-    ctx.scale(dpr, dpr);
-
-    var mxC = entries[0].count;
-    var mnC = entries[entries.length - 1].count;
-    var mxF = Math.min(w * 0.08, 72);
-    var mnF = Math.max(w * 0.02, 18);
-    var colors = ['#A78BFA', '#F472B6', '#818CF8', '#34D399', '#FBBF24', '#FB923C', '#C4B5FD', '#F9A8D4'];
-    var placed = [];
-
-    function fs(c) {
-      if (mxC === mnC) return (mxF + mnF) / 2;
-      return mnF + ((c - mnC) / (mxC - mnC)) * (mxF - mnF);
-    }
-
-    function hit(a, b) {
-      return !(a.x + a.w < b.x || b.x + b.w < a.x ||
-               a.y + a.h < b.y || b.y + b.h < a.y);
-    }
-
-    function tryPlace(text, size) {
-      ctx.font = 'bold ' + size + 'px "Inter","Noto Sans TC",sans-serif';
-      var tw = ctx.measureText(text).width + 12;
-      var th = size * 1.35;
-      var cx = w / 2, cy = h / 2;
-      var angle = Math.random() * Math.PI * 2;
-
-      for (var r = 0; r < Math.max(w, h) * 0.55; r += 5) {
-        var x = cx + r * Math.cos(angle) - tw / 2;
-        var y = cy + r * Math.sin(angle) + th / 4;
-
-        if (x < 4 || x + tw > w - 4 || y - th < 4 || y > h - 4) {
-          angle += 0.5;
-          continue;
-        }
-
-        var rect = { x: x, y: y - th, w: tw, h: th };
-        var collision = false;
-        for (var p = 0; p < placed.length; p++) {
-          if (hit(rect, placed[p])) { collision = true; break; }
-        }
-        if (!collision) return { x: x, y: y, rect: rect };
-        angle += 0.3;
-      }
-      return null;
-    }
-
-    entries.forEach(function(entry, i) {
-      var size = fs(entry.count);
-      var result = null;
-      for (var attempt = 0; attempt < 5 && size >= mnF; attempt++) {
-        result = tryPlace(entry.text, size);
-        if (result) break;
-        size *= 0.8;
-      }
-      if (result) {
-        placed.push(result.rect);
-        ctx.font = 'bold ' + size + 'px "Inter","Noto Sans TC",sans-serif';
-        ctx.fillStyle = colors[i % colors.length];
-        ctx.globalAlpha = 0.75 + (0.25 * entry.count / mxC);
-        ctx.fillText(entry.text, result.x, result.y);
-        ctx.globalAlpha = 1;
-      }
+  // ------------------------------------------------------------
+  // 1. 整理資料
+  // ------------------------------------------------------------
+  var entries = Object.entries(words)
+    .map(function(e) {
+      return {
+        text: String(e[0]),
+        count: Number(e[1]) || 0
+      };
+    })
+    .filter(function(e) {
+      return e.text.trim() !== '' && e.count > 0;
+    })
+    .sort(function(a, b) {
+      return b.count - a.count;
     });
 
-    // Keyword tags
-    var kwEl = document.getElementById('keywordList');
-    if (kwEl) {
-      entries.slice(0, 8).forEach(function(entry) {
-        var tag = document.createElement('span');
-        tag.className = 'dash-kw-tag';
-        tag.innerHTML = entry.text + ' <span class="dash-kw-count">' + entry.count + '</span>';
-        kwEl.appendChild(tag);
-      });
-    }
+  // ------------------------------------------------------------
+  // 2. 沒有資料
+  // ------------------------------------------------------------
+  if (entries.length === 0) {
+    canvas.style.display = 'none';
+
+    // 清除舊的 empty message
+    var oldEmpty = container.querySelector('.word-cloud-empty');
+    if (oldEmpty) oldEmpty.remove();
+
+    var empty = document.createElement('div');
+    empty.className = 'word-cloud-empty';
+    empty.textContent = '尚無文字回饋';
+
+    empty.style.cssText = [
+      'width:100%',
+      'height:100%',
+      'min-height:240px',
+      'display:flex',
+      'align-items:center',
+      'justify-content:center',
+      'color:rgba(255,255,255,.4)',
+      'font-size:2rem',
+      'font-weight:600'
+    ].join(';');
+
+    container.appendChild(empty);
+    return;
   }
-};
+
+  // ------------------------------------------------------------
+  // 3. 顯示 Canvas
+  // ------------------------------------------------------------
+  canvas.style.display = 'block';
+
+  var oldEmpty = container.querySelector('.word-cloud-empty');
+  if (oldEmpty) oldEmpty.remove();
+
+  // ------------------------------------------------------------
+  // 4. 取得 Canvas 尺寸
+  //
+  // 不直接依賴 canvas 原本高度，
+  // 避免 Canvas 高度為 0 導致整個文字雲看不到。
+  // ------------------------------------------------------------
+  var w = container.clientWidth;
+
+  if (!w || w < 100) {
+    w = canvas.clientWidth || 900;
+  }
+
+  var h = container.clientHeight;
+
+  if (!h || h < 180) {
+    h = Math.round(w * 0.58);
+  }
+
+  // Projection Dashboard 建議限制高度
+  h = Math.max(260, Math.min(h, 520));
+
+  var dpr = window.devicePixelRatio || 1;
+
+  canvas.width = Math.round(w * dpr);
+  canvas.height = Math.round(h * dpr);
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+
+  var ctx = canvas.getContext('2d');
+
+  // 清除畫布
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 使用高 DPI
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  // ------------------------------------------------------------
+  // 5. 字體大小
+  //
+  // 核心：
+  // 最大票數 = 最大字
+  // 最小票數 = 最小字
+  //
+  // 使用線性比例，讓 3票 / 2票 / 1票
+  // 有非常明顯的視覺差異。
+  // ------------------------------------------------------------
+  var maxCount = entries[0].count;
+  var minCount = entries[entries.length - 1].count;
+
+  // Dashboard 字體大小
+  var MAX_FONT = Math.min(82, Math.max(56, w * 0.075));
+  var MIN_FONT = Math.min(30, Math.max(22, w * 0.028));
+
+  function getFontSize(count) {
+
+    // 所有票數相同
+    if (maxCount === minCount) {
+      return Math.round((MAX_FONT + MIN_FONT) / 2);
+    }
+
+    // 票數比例
+    var ratio = (count - minCount) / (maxCount - minCount);
+
+    // 線性放大
+    return Math.round(
+      MIN_FONT + ratio * (MAX_FONT - MIN_FONT)
+    );
+  }
+
+  // ------------------------------------------------------------
+  // 6. 顏色
+  // ------------------------------------------------------------
+  var colors = [
+    '#A78BFA',
+    '#F472B6',
+    '#818CF8',
+    '#34D399',
+    '#FBBF24',
+    '#FB923C',
+    '#C4B5FD',
+    '#F9A8D4'
+  ];
+
+  // ------------------------------------------------------------
+  // 7. 已放置文字的位置
+  // ------------------------------------------------------------
+  var placed = [];
+
+  // ------------------------------------------------------------
+  // 8. 判斷兩個矩形是否重疊
+  //
+  // 加一點 padding，讓文字彼此不要貼太近。
+  // ------------------------------------------------------------
+  function isCollision(a, b) {
+    var padding = 8;
+
+    return !(
+      a.x + a.w + padding < b.x ||
+      b.x + b.w + padding < a.x ||
+      a.y + a.h + padding < b.y ||
+      b.y + b.h + padding < a.y
+    );
+  }
+
+  // ------------------------------------------------------------
+  // 9. 尋找文字位置
+  //
+  // 從中央開始，沿著 spiral 往外找。
+  // 比原本隨機角度的方法穩定很多。
+  // ------------------------------------------------------------
+  function findPosition(text, fontSize) {
+
+    ctx.font =
+      '700 ' +
+      fontSize +
+      'px "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif';
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    var textWidth = ctx.measureText(text).width;
+
+    // 中文字稍微增加左右空間
+    var boxWidth = textWidth + 12;
+    var boxHeight = fontSize * 1.25;
+
+    var centerX = w / 2;
+    var centerY = h / 2;
+
+    // 最大搜尋半徑
+    var maxRadius = Math.min(w, h) * 0.48;
+
+    // Spiral 搜尋
+    for (var radius = 0; radius <= maxRadius; radius += 4) {
+
+      // 每一圈增加角度
+      var steps = Math.max(12, Math.round(radius * 0.35));
+
+      for (var s = 0; s < steps; s++) {
+
+        var angle =
+          (s / steps) * Math.PI * 2 +
+          radius * 0.045;
+
+        var x =
+          centerX +
+          Math.cos(angle) * radius -
+          boxWidth / 2;
+
+        var y =
+          centerY +
+          Math.sin(angle) * radius -
+          boxHeight / 2;
+
+        // 不要碰到邊界
+        if (x < 8) continue;
+        if (x + boxWidth > w - 8) continue;
+        if (y < 8) continue;
+        if (y + boxHeight > h - 8) continue;
+
+        var rect = {
+          x: x,
+          y: y,
+          w: boxWidth,
+          h: boxHeight
+        };
+
+        // 檢查是否跟已放置文字重疊
+        var collision = false;
+
+        for (var p = 0; p < placed.length; p++) {
+          if (isCollision(rect, placed[p])) {
+            collision = true;
+            break;
+          }
+        }
+
+        if (!collision) {
+          return {
+            x: x,
+            y: y,
+            width: textWidth,
+            height: boxHeight,
+            rect: rect
+          };
+        }
+      }
+    }
+
+    return null;
+  }
+
+  // ------------------------------------------------------------
+  // 10. 先畫大字，再畫小字
+  //
+  // 因為 entries 已經按照票數由高到低排序，
+  // 所以最高票的文字一定會優先取得中央位置。
+  // ------------------------------------------------------------
+  entries.forEach(function(entry, index) {
+
+    var fontSize = getFontSize(entry.count);
+    var result = null;
+
+    // 如果空間不足，逐步縮小字體再嘗試
+    for (var attempt = 0; attempt < 8; attempt++) {
+
+      result = findPosition(entry.text, fontSize);
+
+      if (result) break;
+
+      fontSize = Math.round(fontSize * 0.88);
+
+      // 不讓文字縮得太小
+      if (fontSize < 18) {
+        fontSize = 18;
+        result = findPosition(entry.text, fontSize);
+        break;
+      }
+    }
+
+    // 找不到位置就略過
+    if (!result) return;
+
+    placed.push(result.rect);
+
+    // ----------------------------------------------------------
+    // 11. 繪製文字
+    // ----------------------------------------------------------
+    ctx.font =
+      '700 ' +
+      fontSize +
+      'px "Noto Sans TC", "Microsoft JhengHei", Arial, sans-serif';
+
+    ctx.textAlign = 'left';
+    ctx.textBaseline = 'middle';
+
+    // 票數越高，不透明度越高
+    var opacity = 0.72;
+
+    if (maxCount > 0) {
+      opacity =
+        0.70 +
+        0.30 * (entry.count / maxCount);
+    }
+
+    ctx.globalAlpha = opacity;
+    ctx.fillStyle = colors[index % colors.length];
+
+    ctx.fillText(
+      entry.text,
+      result.x,
+      result.y + result.height / 2
+    );
+
+    ctx.globalAlpha = 1;
+  });
+
+  // ------------------------------------------------------------
+  // 12. 清除原本 Q3 下方的 keyword tags
+  //
+  // 因為現在 Q3 已經完整使用文字雲呈現，
+  // 不再需要下面另外一排：
+  // 「信任 3 / AI賦能 2 / 工作生活平衡 2 ...」
+  // ------------------------------------------------------------
+  var kwEl = document.getElementById('keywordList');
+
+  if (kwEl) {
+    kwEl.innerHTML = '';
+    kwEl.style.display = 'none';
+  }
+}
