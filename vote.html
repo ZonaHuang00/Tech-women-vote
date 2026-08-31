@@ -6,6 +6,49 @@
     <title>2026 TechWomen@TW — 現場投票</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+      /* 語言切換按鈕膠囊樣式 */
+      .lang-switch-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+        position: relative;
+        z-index: 10;
+      }
+      .lang-pill {
+        display: inline-flex;
+        background: rgba(255, 255, 255, 0.15);
+        backdrop-filter: blur(10px);
+        -webkit-backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        border-radius: 999px;
+        padding: 4px;
+        gap: 4px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+      .lang-toggle-btn {
+        border: none;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        padding: 6px 18px;
+        border-radius: 999px;
+        font-size: 13.5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.25s ease;
+      }
+      .lang-toggle-btn.active {
+        background: #FFFFFF;
+        color: #4F46E5;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      .lang-hint-text {
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.7);
+        margin-top: 6px;
+      }
+    </style>
 </head>
 <body class="vote-page">
 
@@ -19,6 +62,15 @@
             <div class="hero-mesh"></div>
         </div>
         <div class="hero-content">
+            <!-- 語言切換器 -->
+            <div class="lang-switch-wrapper">
+                <div class="lang-pill">
+                    <button type="button" id="langBtnZh" class="lang-toggle-btn active" onclick="VoteApp.setLanguage('zh')">中文</button>
+                    <button type="button" id="langBtnEn" class="lang-toggle-btn" onclick="VoteApp.setLanguage('en')">English</button>
+                </div>
+                <div id="langHint" class="lang-hint-text">可隨時切換語言</div>
+            </div>
+
             <div class="hero-logo">
                 <div class="logo-icon"><span class="logo-symbol">TW</span></div>
                 <div class="logo-text">
@@ -50,184 +102,14 @@
             <!-- Status -->
             <div class="status-pill">
                 <span class="live-dot"></span>
-                <span>投票進行中</span>
+                <span id="liveStatusText">投票進行中</span>
                 <span class="status-sep">·</span>
-                <span>已有 <strong id="voterCount">--</strong> 人參與</span>
+                <span><span id="countPrefixText">已有 </span><strong id="voterCount">--</strong><span id="countSuffixText"> 人參與</span></span>
             </div>
 
             <form id="voteForm" autocomplete="off">
-
-                <!-- ==================== Q1: 未來10年職場最重要的能力 ==================== -->
-                <section class="question-card glass-card" data-question="1">
-                    <div class="card-glow"></div>
-                    <div class="q-header">
-                        <span class="q-badge">Q1</span>
-                        <span class="q-type">複選題</span>
-                    </div>
-                    <h2 class="q-title">你認為未來 10 年職場最重要的能力是什麼？</h2>
-                    <p class="q-hint">最多可選擇 3 項</p>
-
-                    <div class="chip-grid" id="q1-options">
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="AI工具運用">
-                            <div class="chip-face"><span class="chip-icon">🤖</span><span class="chip-text">AI工具運用</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="情緒管理">
-                            <div class="chip-face"><span class="chip-icon">🧘</span><span class="chip-text">情緒管理</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="溝通協調力">
-                            <div class="chip-face"><span class="chip-icon">🤝</span><span class="chip-text">溝通協調力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="解決問題的能力">
-                            <div class="chip-face"><span class="chip-icon">🧩</span><span class="chip-text">解決問題的能力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="抗壓性">
-                            <div class="chip-face"><span class="chip-icon">💪</span><span class="chip-text">抗壓性</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="創新思維">
-                            <div class="chip-face"><span class="chip-icon">💡</span><span class="chip-text">創新思維</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="領導力">
-                            <div class="chip-face"><span class="chip-icon">👑</span><span class="chip-text">領導力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="人脈經營能力">
-                            <div class="chip-face"><span class="chip-icon">🌐</span><span class="chip-text">人脈經營能力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="思考邏輯能力">
-                            <div class="chip-face"><span class="chip-icon">🧠</span><span class="chip-text">思考邏輯能力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip">
-                            <input type="checkbox" name="q1" value="時間管理能力">
-                            <div class="chip-face"><span class="chip-icon">⏰</span><span class="chip-text">時間管理能力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                    </div>
-                    <div class="selection-counter" id="q1-counter">已選 0 / 3 項</div>
-                    <div class="error-message" id="q1-error"></div>
-                </section>
-
-                <!-- ==================== Q2: 跨世代互相學習的能力 ==================== -->
-                <section class="question-card glass-card" data-question="2">
-                    <div class="card-glow"></div>
-                    <div class="q-header">
-                        <span class="q-badge q-badge--pink">Q2</span>
-                        <span class="q-type">複選題</span>
-                    </div>
-                    <h2 class="q-title">不同世代最能互相學習的能力是什麼？</h2>
-                    <p class="q-hint">最多可選擇 3 項</p>
-
-                    <div class="chip-grid" id="q2-options">
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="問題解決思維">
-                            <div class="chip-face"><span class="chip-icon">🔍</span><span class="chip-text">問題解決思維</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="溝通與人際關係建立">
-                            <div class="chip-face"><span class="chip-icon">💬</span><span class="chip-text">溝通與人際關係建立</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="風險意識管理">
-                            <div class="chip-face"><span class="chip-icon">⚠️</span><span class="chip-text">風險意識管理</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="工作效率與時間管理">
-                            <div class="chip-face"><span class="chip-icon">⏱️</span><span class="chip-text">工作效率與時間管理</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="問題解決經驗">
-                            <div class="chip-face"><span class="chip-icon">🛠️</span><span class="chip-text">問題解決經驗</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="創新思維與挑戰現狀">
-                            <div class="chip-face"><span class="chip-icon">🚀</span><span class="chip-text">創新思維與挑戰現狀</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="抗壓與韌性">
-                            <div class="chip-face"><span class="chip-icon">🏋️</span><span class="chip-text">抗壓與韌性</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="跨文化合作能力">
-                            <div class="chip-face"><span class="chip-icon">🌍</span><span class="chip-text">跨文化合作能力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="工作與生活平衡觀念">
-                            <div class="chip-face"><span class="chip-icon">⚖️</span><span class="chip-text">工作與生活平衡觀念</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="職涯發展規劃能力">
-                            <div class="chip-face"><span class="chip-icon">📈</span><span class="chip-text">職涯發展規劃能力</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--pink">
-                            <input type="checkbox" name="q2" value="新技術的接受度">
-                            <div class="chip-face"><span class="chip-icon">📱</span><span class="chip-text">新技術的接受度</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                    </div>
-                    <div class="selection-counter" id="q2-counter">已選 0 / 3 項</div>
-                    <div class="error-message" id="q2-error"></div>
-                </section>
-
-                <!-- ==================== Q3: 期待未來職場的關鍵詞 ==================== -->
-                <section class="question-card glass-card" data-question="3">
-                    <div class="card-glow"></div>
-                    <div class="q-header">
-                        <span class="q-badge q-badge--teal">Q3</span>
-                        <span class="q-type">複選題</span>
-                    </div>
-                    <h2 class="q-title">請選出最符合你期待未來職場的三個詞</h2>
-                    <p class="q-hint">最多可選擇 3 項</p>
-
-                    <div class="chip-grid" id="q3-options">
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="信任">
-                            <div class="chip-face"><span class="chip-icon">🤞</span><span class="chip-text">信任</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="尊重">
-                            <div class="chip-face"><span class="chip-icon">🙏</span><span class="chip-text">尊重</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="成長">
-                            <div class="chip-face"><span class="chip-icon">🌱</span><span class="chip-text">成長</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="創新">
-                            <div class="chip-face"><span class="chip-icon">💡</span><span class="chip-text">創新</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="彈性">
-                            <div class="chip-face"><span class="chip-icon">🔄</span><span class="chip-text">彈性</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="共融">
-                            <div class="chip-face"><span class="chip-icon">🤗</span><span class="chip-text">共融</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="AI賦能">
-                            <div class="chip-face"><span class="chip-icon">🤖</span><span class="chip-text">AI賦能</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="多元包容">
-                            <div class="chip-face"><span class="chip-icon">🌈</span><span class="chip-text">多元包容</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="工作生活平衡">
-                            <div class="chip-face"><span class="chip-icon">⚖️</span><span class="chip-text">工作生活平衡</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                        <label class="vote-chip vote-chip--teal">
-                            <input type="checkbox" name="q3" value="心理安全感">
-                            <div class="chip-face"><span class="chip-icon">🛡️</span><span class="chip-text">心理安全感</span><div class="chip-check-ring"><svg viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div></div>
-                        </label>
-                    </div>
-                    <div class="selection-counter" id="q3-counter">已選 0 / 3 項</div>
-                    <div class="error-message" id="q3-error"></div>
-                </section>
+                <!-- 動態放置 Q1, Q2, Q3 題目卡片區 -->
+                <div id="questionsContainer"></div>
 
                 <!-- Submit -->
                 <div class="submit-area">
