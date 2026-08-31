@@ -2,12 +2,31 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>2026 TechWomen@TW — 現場投票</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-      /* 語言切換按鈕膠囊樣式 */
+      /* ================= 全局與容器修復（防溢出） ================= */
+      html, body {
+        width: 100%;
+        max-width: 100vw;
+        overflow-x: hidden; /* 徹底杜絕橫向滑動 */
+        box-sizing: border-box;
+      }
+      *, *::before, *::after {
+        box-sizing: border-box;
+      }
+      .container {
+        width: 100% !important;
+        max-width: 640px !important;
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        margin: 0 auto !important;
+        box-sizing: border-box !important;
+      }
+
+      /* 語言切換膠囊按鈕 */
       .lang-switch-wrapper {
         display: flex;
         flex-direction: column;
@@ -30,7 +49,7 @@
       .lang-toggle-btn {
         border: none;
         background: transparent;
-        color: rgba(255, 255, 255, 0.8);
+        color: rgba(255, 255, 255, 0.85);
         padding: 6px 18px;
         border-radius: 999px;
         font-size: 13.5px;
@@ -45,8 +64,131 @@
       }
       .lang-hint-text {
         font-size: 12px;
-        color: rgba(255, 255, 255, 0.7);
+        color: rgba(255, 255, 255, 0.75);
         margin-top: 6px;
+      }
+
+      /* ================= 核心修復：題目卡片與雙欄排版 ================= */
+      .question-card {
+        width: 100% !important;
+        box-sizing: border-box !important;
+        padding: 24px 16px !important; /* 縮小卡片內距，給文字更多空間 */
+      }
+
+      /* 解決問題 1 & 2：強制定寬 50%/50% 與等高對齊 */
+      .chip-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important; /* 確保左右等寬且不被長英文撐破 */
+        gap: 10px !important;
+        width: 100% !important;
+        align-items: stretch !important; /* 讓同一橫列卡片等高 */
+      }
+
+      .vote-chip {
+        display: flex !important;
+        width: 100% !important;
+        height: 100% !important;
+        margin: 0 !important;
+        cursor: pointer;
+      }
+
+      .vote-chip input[type="checkbox"] {
+        display: none !important;
+      }
+
+      /* 選項外框：等高、彈性垂直置中 */
+      .chip-face {
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        width: 100% !important;
+        min-height: 64px !important; /* 設定統一基礎高度，確保單行/多行皆平整 */
+        padding: 10px 10px 10px 12px !important;
+        border-radius: 16px !important;
+        background: rgba(255, 255, 255, 0.8) !important;
+        border: 1.5px solid rgba(226, 232, 240, 0.8) !important;
+        box-sizing: border-box !important;
+        transition: all 0.2s ease !important;
+        gap: 8px !important;
+      }
+
+      /* 選項 Emoji */
+      .chip-icon {
+        font-size: 19px !important;
+        line-height: 1 !important;
+        flex-shrink: 0 !important;
+      }
+
+      /* 選項文字：自動折行且不撐破版面 */
+      .chip-text {
+        flex: 1 1 auto !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        line-height: 1.25 !important;
+        color: #1E293B !important;
+        word-break: break-word !important; /* 長單字自動斷行 */
+        hyphens: auto !important;
+        text-align: left !important;
+      }
+
+      /* 勾選圓圈：固定在最右側不被壓縮 */
+      .chip-check-ring {
+        width: 20px !important;
+        height: 20px !important;
+        flex-shrink: 0 !important;
+        border-radius: 50% !important;
+        border: 1.5px solid #CBD5E1 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.2s ease !important;
+        background: #FFFFFF !important;
+      }
+
+      .chip-check-ring svg {
+        width: 12px !important;
+        height: 12px !important;
+        opacity: 0 !important;
+        transform: scale(0.5) !important;
+        transition: all 0.2s ease !important;
+      }
+
+      /* 選中狀態樣式 (Q1 藍紫色) */
+      .vote-chip input[type="checkbox"]:checked + .chip-face {
+        background: #EEF2FF !important;
+        border-color: #6366F1 !important;
+        box-shadow: 0 0 0 1px #6366F1 !important;
+      }
+      .vote-chip input[type="checkbox"]:checked + .chip-face .chip-check-ring {
+        background: #6366F1 !important;
+        border-color: #6366F1 !important;
+      }
+      .vote-chip input[type="checkbox"]:checked + .chip-face .chip-check-ring svg {
+        opacity: 1 !important;
+        transform: scale(1) !important;
+        stroke: #FFFFFF !important;
+      }
+
+      /* 選中狀態樣式 (Q2 粉色系) */
+      .vote-chip--pink input[type="checkbox"]:checked + .chip-face {
+        background: #FDF2F8 !important;
+        border-color: #EC4899 !important;
+        box-shadow: 0 0 0 1px #EC4899 !important;
+      }
+      .vote-chip--pink input[type="checkbox"]:checked + .chip-face .chip-check-ring {
+        background: #EC4899 !important;
+        border-color: #EC4899 !important;
+      }
+
+      /* 選中狀態樣式 (Q3 綠藍色系) */
+      .vote-chip--teal input[type="checkbox"]:checked + .chip-face {
+        background: #F0FDFA !important;
+        border-color: #14B8A6 !important;
+        box-shadow: 0 0 0 1px #14B8A6 !important;
+      }
+      .vote-chip--teal input[type="checkbox"]:checked + .chip-face .chip-check-ring {
+        background: #14B8A6 !important;
+        border-color: #14B8A6 !important;
       }
     </style>
 </head>
