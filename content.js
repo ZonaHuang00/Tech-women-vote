@@ -1,11 +1,8 @@
 /* ============================================================
    content.js — 所有可編輯文字與題目資料集中管理 (雙語支援)
-   ============================================================
-   ★ 修改此檔案即可更新中英文介面、題目與選項 ★
    ============================================================ */
 
 const CONTENT = {
-  // 活動基本資訊
   event: {
     year: '2026',
     name: 'TechWomen@TW',
@@ -64,7 +61,7 @@ const CONTENT = {
     }
   },
 
-  // 投票題目與選項清單 (日後修改文字/選項請在此調整)
+  // 投票題目與選項清單
   questions: {
     q1: {
       tag: 'Q1',
@@ -106,7 +103,6 @@ const CONTENT = {
         en: 'Select up to 3 options'
       },
       options: [
-        // ★ 已將「問題解決思維」與「問題解決經驗」合併為單一選項
         { id: 'q2_problem_solving_exp', icon: '🔍', text: { zh: '問題解決思維與經驗', en: 'Problem-solving Mindset & Experience' } },
         { id: 'q2_comm', icon: '💬', text: { zh: '溝通與人際關係建立', en: 'Communication & Relationships' } },
         { id: 'q2_risk', icon: '⚠️', text: { zh: '風險意識管理', en: 'Risk Management' } },
@@ -148,21 +144,40 @@ const CONTENT = {
     }
   },
 
-  // 感謝頁設定
+  // ★ 感謝頁雙語設定 (含小禮物提示卡片)
   thankyou: {
-    title: '感謝妳的參與！',
-    subtitle: '投票已成功送出 🎉',
-    timeLabel: '🕐 投票時間',
-    idLabel: '🎫 投票編號',
-    eventInfo: [
-      { icon: '📍', text: '投票結果將於下午 Workshop 時段公佈' },
-      { icon: '💡', text: '請留意現場大螢幕的即時排行榜' },
-      { icon: '☕', text: '享用午餐的同時，期待精彩下午場！' },
-    ],
-    footerQuote: '妳的每一個選擇，都在推動科技更具包容力。',
+    zh: {
+      title: '感謝妳的參與！',
+      subtitle: '投票已成功送出 🎉',
+      giftBadge: '領取專屬小禮物',
+      giftTitle: '請截圖或保留此畫面',
+      giftDesc: '憑此畫面可至場外服務台兌換精美紀念小禮一份喔！🎁',
+      timeLabel: '投票時間',
+      idLabel: '投票編號',
+      eventInfo: [
+        { icon: '📍', text: '投票結果將於下午 Workshop 時段公佈' },
+        { icon: '💡', text: '請留意現場大螢幕的即時排行榜' },
+        { icon: '☕', text: '享用午餐的同時，期待精彩下午場！' },
+      ],
+      footerQuote: '妳的每一個選擇，都在推動科技更具包容力。'
+    },
+    en: {
+      title: 'Thank You for Participating!',
+      subtitle: 'Your vote has been submitted 🎉',
+      giftBadge: 'Claim Your Special Gift',
+      giftTitle: 'Please screenshot or keep this screen',
+      giftDesc: 'Show this screen at the outside counter to collect your gift! 🎁',
+      timeLabel: 'Vote Time',
+      idLabel: 'Vote ID',
+      eventInfo: [
+        { icon: '📍', text: 'Results will be announced during the afternoon Workshop' },
+        { icon: '💡', text: 'Keep an eye on the main stage screen for live rankings' },
+        { icon: '☕', text: 'Enjoy your lunch and look forward to the afternoon session!' },
+      ],
+      footerQuote: 'Every choice you make empowers technology with greater inclusion.'
+    }
   },
 
-  // Dashboard 設定
   dashboard: {
     headerTitle: '現場投票結果',
     votersLabel: '參與人數',
