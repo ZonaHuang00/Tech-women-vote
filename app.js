@@ -347,7 +347,7 @@ var VoteApp = {
     });
 
     var voteTime = formatTime(new Date());
-    var redirectUrl = 'thankyou.html?id=' + encodeURIComponent(voteId) + '&t=' + encodeURIComponent(voteTime);
+    var redirectUrl = 'thankyou.html?id=' + encodeURIComponent(voteId) + '&t=' + encodeURIComponent(voteTime) + '&lang=' + encodeURIComponent(self.currentLang);
 
     // 離線模式
     if (isOffline()) {
