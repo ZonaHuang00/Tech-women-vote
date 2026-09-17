@@ -155,11 +155,11 @@ const CONTENT = {
       timeLabel: '投票時間',
       idLabel: '投票編號',
       eventInfo: [
-        { icon: '📍', text: '投票結果將於下午 Workshop 時段公佈' },
+        { icon: '📍', text: '投票結果將於下午場次時段公佈' },
         { icon: '💡', text: '請留意現場大螢幕的即時排行榜' },
         { icon: '☕', text: '享用午餐的同時，期待精彩下午場！' },
       ],
-      footerQuote: '妳的每一個選擇，都在推動科技更具包容力。'
+      footerQuote: '你/妳的每一個選擇，都在推動科技更具包容力。'
     },
     en: {
       title: 'Thank You for Participating!',
@@ -170,8 +170,8 @@ const CONTENT = {
       timeLabel: 'Vote Time',
       idLabel: 'Vote ID',
       eventInfo: [
-        { icon: '📍', text: 'Results will be announced during the afternoon Workshop' },
-        { icon: '💡', text: 'Keep an eye on the main stage screen for live rankings' },
+        { icon: '📍', text: 'Results will be announced during the afternoon session.' },
+        { icon: '💡', text: 'Keep an eye on the main stage screen for live rankings.' },
         { icon: '☕', text: 'Enjoy your lunch and look forward to the afternoon session!' },
       ],
       footerQuote: 'Every choice you make empowers technology with greater inclusion.'
