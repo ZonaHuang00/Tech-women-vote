@@ -26,10 +26,10 @@ const CONTENT = {
       counterTemplate: (cur, max) => `已選 ${cur} / ${max} 項`,
       counterMaxLimit: (max) => `已選 ${max} / ${max} 項（已達上限）`,
       alreadyVotedTitle: '你/妳已完成投票',
-      alreadyVotedMsg: '每人限投一次，感謝你/妳的參與！',
+      alreadyVotedMsg: '每人限投一次，感謝您的參與！',
       alreadyVotedSub: '結果將在下午場次時公佈',
       closedTitle: '投票已截止',
-      closedMsg: '感謝你/妳的關注，請期待下午的結果公佈！',
+      closedMsg: '感謝您的關注，請期待下午的結果公佈！',
       closedLink: '查看投票結果',
       errorMin: '請至少選擇一個選項',
       errorMax: '已達選擇上限',
@@ -147,7 +147,7 @@ const CONTENT = {
   // ★ 感謝頁雙語設定 (含小禮物提示卡片)
   thankyou: {
     zh: {
-      title: '感謝你/妳的參與！',
+      title: '感謝您的參與！',
       subtitle: '投票已成功送出 🎉',
       giftBadge: '領取專屬小禮物',
       giftTitle: '請截圖或保留此畫面',
