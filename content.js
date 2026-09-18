@@ -25,7 +25,7 @@ const CONTENT = {
       submitNote: '每人限投一次，送出後無法修改',
       counterTemplate: (cur, max) => `已選 ${cur} / ${max} 項`,
       counterMaxLimit: (max) => `已選 ${max} / ${max} 項（已達上限）`,
-      alreadyVotedTitle: '你/妳已完成投票',
+      alreadyVotedTitle: '您已完成投票',
       alreadyVotedMsg: '每人限投一次，感謝您的參與！',
       alreadyVotedSub: '結果將在下午場次時公佈',
       closedTitle: '投票已截止',
